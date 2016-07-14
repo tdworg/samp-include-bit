@@ -24,9 +24,9 @@ freely, subject to the following restrictions:
 #endif
 #define _TDW_BIT_INC_
 
-#define BitMsk(%0) (1 << (%0))
+#define BitMask(%0) (1 << (%0))
 
 // %0 - arg; %1 - value
-#define BitSet(%0,%1) ((%0) |=  (%1))
-#define BitClr(%0,%1) ((%0) &= ~(%1))
-#define BitFlp(%0,%1) ((%0) ^=  (%1))
+#define BitSet(%0,%1)   ((%0) |=  (%1))
+#define BitClear(%0,%1) ((%0) &= ~(%1))
+#define BitFlip(%0,%1)  ((%0) ^=  (%1))
