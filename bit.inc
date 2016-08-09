@@ -41,7 +41,7 @@ freely, subject to the following restrictions:
 #define _TDW_BIT_INC_
 
 
-#define BitMask(%0) (1 << ((%0) % 32))
+#define BitMask(%0) (1 << ((%0) % cellbits))
 
 #define BitVSet(%0,%1)   ((%0) |=  (%1))
 #define BitVClear(%0,%1) ((%0) &= ~(%1))
@@ -50,6 +50,8 @@ freely, subject to the following restrictions:
 #define BitMSet(%0,%1)   ((%0) |=  BitMask((%1)))
 #define BitMClear(%0,%1) ((%0) &= ~BitMask((%1)))
 #define BitMFlip(%0,%1)  ((%0) ^=  BitMask((%1)))
+
+#define MAX_BYTES_PER_CELL (cellbits / charbits)
 
 // Returns true if any bits specified in value are set.
 #define BitTest(%0,%1) (((%0) & (%1)) != 0)
