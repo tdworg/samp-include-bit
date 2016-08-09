@@ -1,4 +1,12 @@
 /** ======================================================================== **\
+	Bit library
+
+| Description:
+Macro functions for bit manipulations.
+
+| Version:
+1.1.0
+
 | License:
 Copyright (c) 2016 Double V
 
@@ -19,14 +27,27 @@ freely, subject to the following restrictions:
 3.	This notice may not be removed or altered from any source distribution.
 \** ======================================================================== **/
 
+
+// I remove this constant because the compiler automatically generates it.
+// github.com/Zeex/pawn/issues/107
+#if defined _inc_bit
+	#undef _inc_bit
+#endif
+
 #if defined _TDW_BIT_INC_
 	#endinput
 #endif
+
 #define _TDW_BIT_INC_
+
 
 #define BitMask(%0) (1 << (%0))
 
-// %0 - arg; %1 - value
-#define BitSet(%0,%1)   ((%0) |=  (%1))
-#define BitClear(%0,%1) ((%0) &= ~(%1))
-#define BitFlip(%0,%1)  ((%0) ^=  (%1))
+#define BitVSet(%0,%1)   ((%0) |=  (%1))
+#define BitVClear(%0,%1) ((%0) &= ~(%1))
+#define BitVFlip(%0,%1)  ((%0) ^=  (%1))
+
+// Returns true if any bits specified in value are set.
+#define BitTest(%0,%1) (((%0) & (%1)) != 0)
+// Returns true if all bits specified in value are set.
+#define BitChunk(%0,%1) (((%0) & (%1)) == (%1))
