@@ -129,3 +129,24 @@ stock
 	while (array_size-- != 0);
 	return count;
 }
+
+
+stock
+	BitArray_All(const Bit@Array:array[], array_size = sizeof array)
+{
+	return BitArray_Count(array, array_size) == array_size;
+}
+
+
+stock
+	BitArray_None(const Bit@Array:array[], array_size = sizeof array)
+{
+	return BitArray_Count(array, array_size) == 0;
+}
+
+
+stock
+	BitArray_Any(const Bit@Array:array[], array_size = sizeof array)
+{
+	return BitArray_Count(array, array_size) > 0;
+}
