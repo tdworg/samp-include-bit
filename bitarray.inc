@@ -155,3 +155,10 @@ stock
 {
 	return BitArray_Count(array, array_size) > 0;
 }
+
+
+stock
+	BitArray_Test(const Bit@Array:array[], pos)
+{
+	return BitTest(_:array[BitArray_GetPos(pos)], 0x01);
+}
