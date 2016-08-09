@@ -41,7 +41,7 @@ freely, subject to the following restrictions:
 #define _TDW_BIT_INC_
 
 
-#define BitMask(%0) (1 << (%0))
+#define BitMask(%0) (1 << ((%0) % 32))
 
 #define BitVSet(%0,%1)   ((%0) |=  (%1))
 #define BitVClear(%0,%1) ((%0) &= ~(%1))
