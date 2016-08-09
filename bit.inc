@@ -47,6 +47,10 @@ freely, subject to the following restrictions:
 #define BitVClear(%0,%1) ((%0) &= ~(%1))
 #define BitVFlip(%0,%1)  ((%0) ^=  (%1))
 
+#define BitMSet(%0,%1)   ((%0) |=  BitMask((%1)))
+#define BitMClear(%0,%1) ((%0) &= ~BitMask((%1)))
+#define BitMFlip(%0,%1)  ((%0) ^=  BitMask((%1)))
+
 // Returns true if any bits specified in value are set.
 #define BitTest(%0,%1) (((%0) & (%1)) != 0)
 // Returns true if all bits specified in value are set.
