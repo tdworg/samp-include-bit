@@ -5,7 +5,7 @@
 Macro functions for bit manipulations.
 
 | Version:
-1.1.1
+1.1.2
 
 | License:
 Copyright (c) 2016 Double V
