@@ -44,6 +44,8 @@ freely, subject to the following restrictions:
 
 #define BitArray:%0<%1> Bit@Array:%0[(%1) / cellbits + 1]
 
+#define b<%0>[%1] %0[BitArray_GetPos(%1)]
+
 
 stock
 	BitArray_Set(Bit@Array:array[], pos = cellmax, bool:value = true,
@@ -123,7 +125,7 @@ stock
 	new count;
 	do
 	{
-		if (BitTest(array[BitArray_GetPos(array_size)], BitMask(array_size)))
+		if (BitTest(_:array[BitArray_GetPos(array_size)], BitMask(array_size)))
 			count++;
 	}
 	while (array_size-- != 0);
