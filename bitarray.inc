@@ -117,16 +117,19 @@ stock
 }
 
 
+// See algorithm:
+//		//graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
 stock
 	BitArray_Count(const Bit@Array:array[],
 		array_size = sizeof array)
 {
-	array_size *= cellbits;
-	new count;
+	new count, tmp;
 	do
 	{
-		if (BitTest(_:array[BitArray_GetPos(array_size)], BitMask(array_size)))
-			count++;
+		tmp = array[array_size];
+		tmp -= ((tmp >>> 1) & 0x55555555);
+		tmp = (tmp & 0x33333333) + ((tmp >>> 2) & 0x33333333);
+		count += ((tmp + (tmp >>> 4)) * 0x01010101) >>> 24;
 	}
 	while (array_size-- != 0);
 	return count;
