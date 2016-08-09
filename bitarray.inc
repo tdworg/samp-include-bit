@@ -44,6 +44,7 @@ freely, subject to the following restrictions:
 
 #define BitArray:%0<%1> Bit@Array:%0[(%1) / cellbits + 1]
 
+
 stock
 	BitArray_Set(Bit@Array:array[], pos = cellmax, bool:value = true,
 		array_size = sizeof array)
@@ -111,4 +112,20 @@ stock
 		BitMFlip(_:array[BitArray_GetPos(pos)], pos);
 	}
 	return 0;
+}
+
+
+stock
+	BitArray_Count(const Bit@Array:array[],
+		array_size = sizeof array)
+{
+	array_size *= cellbits;
+	new count;
+	do
+	{
+		if (BitTest(array[BitArray_GetPos(array_size)], BitMask(array_size)))
+			count++;
+	}
+	while (array_size-- != 0);
+	return count;
 }
