@@ -53,8 +53,8 @@ stock
 {
 	if (pos == cellmax)
 	{
-		new i;
 		array_size *= cellbits;
+		new i;
 		while (i != array_size)
 		{
 			if (value)
@@ -126,7 +126,7 @@ stock
 	new count, tmp;
 	do
 	{
-		tmp = array[array_size];
+		tmp = _:array[array_size];
 		tmp -= ((tmp >>> 1) & 0x55555555);
 		tmp = (tmp & 0x33333333) + ((tmp >>> 2) & 0x33333333);
 		count += ((tmp + (tmp >>> 4)) * 0x01010101) >>> 24;
@@ -160,5 +160,5 @@ stock
 stock
 	BitArray_Test(const Bit@Array:array[], pos)
 {
-	return BitTest(_:array[BitArray_GetPos(pos)], 0x01);
+	return BitMTest(_:array[BitArray_GetPos(pos)], pos);
 }
