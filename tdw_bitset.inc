@@ -62,6 +62,18 @@ const
 	BIT_16_TAG = tagof(n_bit16),
 	BIT_ST_TAG_B32 = 5;
 
+#if BIT_1_TAG < BIT_ST_TAG
+	#error tag 'TDW_BITSET_1' already defined!
+#elseif BIT_2_TAG < BIT_ST_TAG
+	#error tag 'TDW_BITSET_2' already defined!
+#elseif BIT_4_TAG < BIT_ST_TAG
+	#error tag 'TDW_BITSET_4' already defined!
+#elseif BIT_8_TAG < BIT_ST_TAG
+	#error tag 'TDW_BITSET_8' already defined!
+#elseif BIT_16_TAG < BIT_ST_TAG
+	#error tag 'TDW_BITSET_16' already defined!
+#endif
+
 enum
 	E_BITS
 {
