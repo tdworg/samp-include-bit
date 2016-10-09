@@ -5,7 +5,7 @@
 Macro functions for bit manipulations.
 
 | Version:
-1.1.3
+2.0.0
 
 | License:
 Copyright (c) 2016 Double V
@@ -30,8 +30,8 @@ freely, subject to the following restrictions:
 
 // I remove this constant because the compiler automatically generates it.
 // github.com/Zeex/pawn/issues/107
-#if defined _inc_bit
-	#undef _inc_bit
+#if defined _inc_tdw_bit
+	#undef _inc_tdw_bit
 #endif
 
 #if defined _TDW_BIT_INC_
@@ -40,19 +40,21 @@ freely, subject to the following restrictions:
 
 #define _TDW_BIT_INC_
 
+#if defined MAX_BYTES_PER_CELL
+	#define MAX_BYTES_PER_CELL (cellbits / charbits)
+#endif
 
-#define BitMask(%0) (1 << ((%0) % cellbits))
+#define BitMask%0(%1) (1 << ((%1) & cellbits))
+#define BitSet%0(%1) (_:BIT_OP_TEMPL:%1(|=,|))
+#define BitClear%0(%1) (_:BIT_OP_TEMPL:%1(&=~,&~))
+#define BitFlip%0(%1) (_:BIT_OP_TEMPL:%1(^=,^))
+#define BitTest%0(%1,%2) (((%1) & (_:BIT_MASK_TEMPL:%2)) != 0)
+#define BitChunk%0(%1,%2) (((%1) & (%2)) == (%2))
 
-#define BitVSet(%0,%1)   ((%0) |=  (%1))
-#define BitVClear(%0,%1) ((%0) &= ~(%1))
-#define BitVFlip(%0,%1)  ((%0) ^=  (%1))
-#define BitVTest(%0,%1)  (((%0) & (%1)) != 0)
+#define BIT_OP_TEMPL: BIT_OP_0:BIT_OP_1:
+#define BIT_OP_0:BIT_OP_1:%1,%2(%3,%4) (%1) %3 (_:BIT_MASK_TEMPL:%2)
+#define BIT_OP_1:%1:%2(%3,%4) (%1) %4 (_:BIT_MASK_TEMPL:%2)
 
-#define BitMSet(%0,%1)   ((%0) |=  BitMask((%1)))
-#define BitMClear(%0,%1) ((%0) &= ~BitMask((%1)))
-#define BitMFlip(%0,%1)  ((%0) ^=  BitMask((%1)))
-#define BitMTest(%0,%1)  (((%0) & BitMask(%1)) != 0)
-
-#define MAX_BYTES_PER_CELL (cellbits / charbits)
-
-#define BitChunk(%0,%1) (((%0) & (%1)) == (%1))
+#define BIT_MASK_TEMPL: BIT_0:BIT_1:
+#define BIT_0:BIT_1:%0m:%1) BitMask(%1))
+#define BIT_1:%0) %0)
