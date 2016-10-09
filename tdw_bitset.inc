@@ -44,23 +44,23 @@ freely, subject to the following restrictions:
 #define GetBitOffset%0(%1) ((%1) % cellbits)
 #define GetBitIndex%0(%1) ((%1) / cellbits)
 
-#define TDW_BITSET_TYPES {BIT_1, BIT_2, BIT_4, BIT_8, BIT_16}
+#define TDW_BITSET_TYPES {TDW_BITSET_1, TDW_BITSET_2, TDW_BITSET_4, \
+	TDW_BITSET_8, TDW_BITSET_16}
 
 const
 	BIT_ST_NONE:BIT_ST = BIT_ST_NONE:0,
 	BIT_ST_TAG = tagof(BIT_ST),
-	BIT_1:n_bit1 = BIT_1:0,
-	BIT_2:n_bit2 = BIT_2:0,
-	BIT_4:n_bit4 = BIT_4:0,
-	BIT_8:n_bit8 = BIT_8:0,
-	BIT_16:n_bit16 = BIT_16:0,
+	TDW_BITSET_1:n_bit1 = TDW_BITSET_1:0,
+	TDW_BITSET_2:n_bit2 = TDW_BITSET_2:0,
+	TDW_BITSET_4:n_bit4 = TDW_BITSET_4:0,
+	TDW_BITSET_8:n_bit8 = TDW_BITSET_8:0,
+	TDW_BITSET_16:n_bit16 = TDW_BITSET_16:0,
 	BIT_1_TAG = tagof(n_bit1),
 	BIT_2_TAG = tagof(n_bit2),
 	BIT_4_TAG = tagof(n_bit4),
 	BIT_8_TAG = tagof(n_bit8),
 	BIT_16_TAG = tagof(n_bit16),
 	BIT_ST_TAG_B32 = 5;
-
 
 enum
 	E_BITS
@@ -73,7 +73,7 @@ enum
 	BIT32
 };
 
-#define Bit:%2<%3@%1> BIT_%1:%2[BIT_PART_SIZE(%3@%1)]
+#define Bit:%2<%3@%1> TDW_BITSET_%1:%2[BIT_PART_SIZE(%3@%1)]
 
 #define BIT_PART_SIZE(%3@%1) ((%3) + BIT_SIZE_PART_%1) >>> _:(BIT32 - BIT%1)
 #define BIT_SIZE_PART_1 (31)
