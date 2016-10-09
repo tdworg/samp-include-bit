@@ -2,7 +2,7 @@
 	Bit Array
 
 | Version:
-2.0.1
+2.0.2
 
 | License:
 Copyright (c) 2016 Double V
@@ -61,6 +61,7 @@ const
 	BIT_16_TAG = tagof(n_bit16),
 	BIT_ST_TAG_B32 = 5;
 
+
 enum
 	E_BITS
 {
@@ -110,3 +111,11 @@ stock
 		return 0;
 	return ((_:barray[idx] >>> var) & lim);
 }
+
+#undef BIT_ST
+#undef n_bit1
+#undef n_bit2
+#undef n_bit4
+#undef n_bit8
+#undef n_bit16
+#undef BIT_ST_TAG_B32
