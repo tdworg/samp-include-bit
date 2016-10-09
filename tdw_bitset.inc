@@ -2,7 +2,7 @@
 	Bit Array
 
 | Version:
-2.0.0
+2.0.1
 
 | License:
 Copyright (c) 2016 Double V
@@ -25,8 +25,8 @@ freely, subject to the following restrictions:
 \** ======================================================================== **/
 
 
-#if defined _inc_bitset
-	#undef _inc_bitset
+#if defined _inc_tdw_bitset
+	#undef _inc_tdw_bitset
 #endif
 
 #if defined _TDW_BLIB_BITSET
