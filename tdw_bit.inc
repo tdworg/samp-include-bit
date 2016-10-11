@@ -53,7 +53,7 @@ freely, subject to the following restrictions:
 
 #define BIT_OP_TEMPL: BIT_OP_0:BIT_OP_1:
 #define BIT_OP_0:BIT_OP_1:%1,%2(%3,%4) (%1) %3 (_:BIT_MASK_TEMPL:%2)
-#define BIT_OP_1:%1:%2(%3,%4) (%1) %4 (_:BIT_MASK_TEMPL:%2)
+#define BIT_OP_1:%1;%2(%3,%4) (%1) %4 (_:BIT_MASK_TEMPL:%2)
 
 #define BIT_MASK_TEMPL: BIT_0:BIT_1:
 #define BIT_0:BIT_1:%0m:%1) BitMask(%1))
