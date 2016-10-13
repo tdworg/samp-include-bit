@@ -66,6 +66,10 @@ const
 	BIT_16_TAG = tagof(n_bit16),
 	BIT_ST_TAG_B32 = 5;
 
+// This conditionals check if the tag has already been defined before
+// this library. The conditionals is very simple. If the tag id is less than
+// the id of the special tag, the tag was already used even before the inclusion
+// of this library.
 #if BIT_1_TAG < BIT_ST_TAG
 	#error tag 'TDW_BITSET_1' already defined!
 #elseif BIT_2_TAG < BIT_ST_TAG
