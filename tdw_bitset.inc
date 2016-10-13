@@ -35,18 +35,22 @@ freely, subject to the following restrictions:
 
 #define _TDW_BLIB_BITSET
 
-#tryinclude "tdw_bit"
 
+#tryinclude "tdw_bit"
 #if !defined _TDW_BIT_INC_
 	#error Library 'tdw_bit' is not found! Download it!
 #endif
 
-#define GetBitOffset%0(%1) ((%1) % cellbits)
-#define GetBitIndex%0(%1) ((%1) / cellbits)
+// Functions that compute the index and the offset of an array.
+#define GetBitIndex%0(%1,%2) ((%2) / (tagof(%1) - BIT_ST_TAG))
+#define GetBitOffset%0(%1,%2) ((%2) % (tagof(%1) - BIT_ST_TAG))
 
+// All tags for bit-arrays.
 #define TDW_BITSET_TYPES {TDW_BITSET_1, TDW_BITSET_2, TDW_BITSET_4, \
 	TDW_BITSET_8, TDW_BITSET_16}
 
+// In order to register tags i use const operator to define them. If use
+// the macros, the result would have been different.
 const
 	BIT_ST_NONE:BIT_ST = BIT_ST_NONE:0,
 	BIT_ST_TAG = tagof(BIT_ST),
