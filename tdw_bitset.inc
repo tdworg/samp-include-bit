@@ -117,7 +117,7 @@ stock
 	if (!(-1 < idx < size))
 		return 0;
 	(_:barray[idx] &= ~(lim << var));
-	(_:barray[idx] |=((lim & value) << var));
+	(_:barray[idx] |= ((lim & value) << var));
 	return 1;
 }
 
