@@ -82,6 +82,7 @@ const
 	#error tag 'TDW_BITSET_16' already defined!
 #endif
 
+
 enum
 	E_BITS
 {
@@ -93,6 +94,7 @@ enum
 	BIT32
 };
 
+
 #define Bit:%2<%3@%1> TDW_BITSET_%1:%2[BIT_PART_SIZE(%3@%1)]
 
 #define BIT_PART_SIZE(%3@%1) ((%3) + BIT_SIZE_PART_%1) >>> _:(BIT32 - BIT%1)
@@ -101,6 +103,7 @@ enum
 #define BIT_SIZE_PART_4 (7)
 #define BIT_SIZE_PART_8 (3)
 #define BIT_SIZE_PART_16 (1)
+
 
 stock
 	BitSet_Set(TDW_BITSET_TYPES:barray[], idx, value, size = sizeof barray,
@@ -118,6 +121,7 @@ stock
 	return 1;
 }
 
+
 stock
 	BitSet_Get(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
 		tag = tagof(barray))
@@ -131,6 +135,7 @@ stock
 		return 0;
 	return ((_:barray[idx] >>> var) & lim);
 }
+
 
 #undef BIT_ST
 #undef n_bit1
