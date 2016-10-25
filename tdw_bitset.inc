@@ -95,7 +95,7 @@ enum
 };
 
 
-#define Bit:%2<%3@%1> TDW_BITSET_%1:%2[BIT_PART_SIZE(%3@%1)]
+#define Bit:%2<%1>[%3] TDW_BITSET_%1:%2[BIT_PART_SIZE(%3@%1)]
 
 #define BIT_PART_SIZE(%3@%1) ((%3) + BIT_SIZE_PART_%1) >>> _:(BIT32 - BIT%1)
 #define BIT_SIZE_PART_1 (31)
