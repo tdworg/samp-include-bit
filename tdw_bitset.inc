@@ -96,7 +96,8 @@ enum
 
 
 #define Bit:%2[%3] TDW_BITSET_8:TDW_BITSET_T0:%2|||%3|||
-#define TDW_BITSET_8:TDW_BITSET_T0:%2<%1>|||%3||| TDW_BITSET_%1:%2[BIT_PART_SIZE(%3,%1)]
+#define TDW_BITSET_8:TDW_BITSET_T0:%2<%1>|||%3|||\
+	TDW_BITSET_%1:%2[BIT_PART_SIZE(%3,%1)]
 #define TDW_BITSET_T0:%2|||%3||| %2[BIT_PART_SIZE(%3,8)]
 
 #define BIT_PART_SIZE(%3,%1) ((%3) + BIT_SIZE_PART_%1) >>> _:(BIT32 - BIT%1)
