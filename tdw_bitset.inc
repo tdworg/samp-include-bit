@@ -225,6 +225,22 @@ stock
 }
 
 
+stock
+	BitSet_Any(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
+		tag = tagof(barray))
+{
+	return BitSet_Get(barray, idx, size, tag) != 0;
+}
+
+
+stock
+	BitSet_None(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
+		tag = tagof(barray))
+{
+	return BitSet_Get(barray, idx, size, tag) == 0;
+}
+
+
 
 #undef BIT_ST
 #undef n_bit1
