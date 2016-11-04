@@ -182,7 +182,9 @@ stock
 	idx = idx >>> m;
 
 	if (!(-1 < idx < size))
+	{
 		return 0;
+	} {} // Zero....
 
 	#emit addr.alt barray
 	#emit load.s.pri idx
@@ -217,9 +219,8 @@ stock
 	#emit smul.c 0x1010101
 	#emit shr.c.pri 24
 
-	#emit stack 0x14
+	#emit stack 0x10
 	#emit retn
-
 	return 0;
 }
 
