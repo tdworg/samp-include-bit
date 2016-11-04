@@ -35,8 +35,8 @@ freely, subject to the following restrictions:
 
 #define _TDW_BLIB_BITSET
 
-
 #tryinclude "tdw_bit"
+
 #if !defined _TDW_BIT_INC_
 	#error Library 'tdw_bit' is not found! Download it!
 #endif
