@@ -115,13 +115,17 @@ stock
 {
 	new shift = tag - BIT_ST_TAG - 1,
 		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << _: shift,
-		lim = (1 << (1 << _: shift)) - 1;
+		var = (idx & ((1 << m) - 1)) << shift,
+		lim = (1 << (1 << shift)) - 1;
+
 	idx = idx >>> m;
+
 	if (!(-1 < idx < size))
 		return 0;
+
 	(_:barray[idx] &= ~(lim << var));
 	(_:barray[idx] |= ((lim & value) << var));
+
 	return 1;
 }
 
@@ -132,11 +136,14 @@ stock
 {
 	new shift = tag - BIT_ST_TAG - 1,
 		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << _: shift,
-		lim = (1 << (1 << _: shift)) - 1;
+		var = (idx & ((1 << m) - 1)) << shift,
+		lim = (1 << (1 << shift)) - 1;
+
 	idx = idx >>> m;
+
 	if (!(-1 < idx < size))
 		return 0;
+
 	return ((_:barray[idx] >>> var) & lim);
 }
 
@@ -149,6 +156,7 @@ stock
 		m = BIT_ST_TAG_B32 - shift,
 		lim = (1 << (1 << _: shift)) - 1,
 		index;
+
 	do
 	{
 		printf("%d",
@@ -157,8 +165,64 @@ stock
 		);
 	}
 	while ((++index >>> m) < size);
-	return;
+
+	return 0;
 }
+
+
+stock
+	BitSet_Count(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
+		tag = tagof(barray))
+{
+	new shift = tag - BIT_ST_TAG - 1,
+		m = BIT_ST_TAG_B32 - shift,
+		var = (idx & ((1 << m) - 1)) << _: shift,
+		lim = (1 << (1 << _: shift)) - 1;
+
+	idx = idx >>> m;
+
+	if (!(-1 < idx < size))
+		return 0;
+
+	#emit addr.alt barray
+	#emit load.s.pri idx
+	#emit lidx
+	#emit load.i
+	#emit load.s.alt var
+	#emit shr
+	#emit load.s.alt lim
+	#emit and
+
+	#emit push.pri
+	#emit shr.c.pri 1
+	#emit const.alt 0x55555555
+	#emit and
+	#emit pop.alt
+	#emit sub.alt
+
+	#emit push.pri
+	#emit shr.c.pri 2
+	#emit const.alt 0x33333333
+	#emit and
+	#emit swap.pri
+	#emit and
+	#emit pop.alt
+	#emit add
+
+	#emit move.alt
+	#emit shr.c.pri 4
+	#emit add
+	#emit const.alt 0xf0f0f0f
+	#emit and
+	#emit smul.c 0x1010101
+	#emit shr.c.pri 24
+
+	#emit stack 0x14
+	#emit retn
+
+	return 0;
+}
+
 
 
 #undef BIT_ST
