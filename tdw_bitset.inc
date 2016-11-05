@@ -120,7 +120,7 @@ stock
 
 	idx = idx >>> m;
 
-	if (!(-1 < idx < size))
+	if (_:(-1 < idx < size) == 0)
 		return 0;
 
 	(_:barray[idx] &= ~(lim << var));
@@ -141,10 +141,10 @@ stock
 
 	idx = idx >>> m;
 
-	if (!(-1 < idx < size))
+	if (_:(-1 < idx < size) == 0)
 		return 0;
 
-	return ((_:barray[idx] >>> var) & lim);
+	return (_:barray[idx] >>> var) & lim;
 }
 
 
@@ -154,7 +154,7 @@ stock
 {
 	new shift = tag - BIT_ST_TAG - 1,
 		m = BIT_ST_TAG_B32 - shift,
-		lim = (1 << (1 << _: shift)) - 1,
+		lim = (1 << (1 << shift)) - 1,
 		index;
 
 	do
@@ -176,12 +176,12 @@ stock
 {
 	new shift = tag - BIT_ST_TAG - 1,
 		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << _: shift,
-		lim = (1 << (1 << _: shift)) - 1;
+		var = (idx & ((1 << m) - 1)) << shift,
+		lim = (1 << (1 << shift)) - 1;
 
 	idx = idx >>> m;
 
-	if (!(-1 < idx < size))
+	if (_:(-1 < idx < size) == 0)
 	{
 		return 0;
 	} {} // Zero....
@@ -221,6 +221,7 @@ stock
 
 	#emit stack 0x10
 	#emit retn
+
 	return 0;
 }
 
@@ -241,6 +242,24 @@ stock
 }
 
 
+stock
+	BitSet_Flip(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
+		tag = tagof(barray))
+{
+	new shift = tag - BIT_ST_TAG - 1,
+		m = BIT_ST_TAG_B32 - shift,
+		var = (idx & ((1 << m) - 1)) << shift,
+		lim = (1 << (1 << shift)) - 1;
+
+	idx = idx >>> m;
+
+	if (_:(-1 < idx < size) == 0)
+		return 0;
+
+	(_:barray[idx] ^= ((lim & 0xFFFFFFFF) << var));
+
+	return 1;
+}
 
 #undef BIT_ST
 #undef n_bit1
