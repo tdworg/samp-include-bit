@@ -2,7 +2,7 @@
 	Bit Array
 
 | Version:
-2.1.4
+2.1.5
 
 | License:
 Copyright (c) 2016 Double V
