@@ -149,8 +149,8 @@ stock
 
 
 stock
-	BitSet_Print(TDW_BITSET_TYPES:barray[], size = sizeof barray,
-		tag = tagof(barray))
+	BitSet_Print(TDW_BITSET_TYPES:barray[], const format[] = "%d",
+		size = sizeof barray, tag = tagof(barray))
 {
 	new shift = tag - BIT_ST_TAG - 1,
 		m = BIT_ST_TAG_B32 - shift,
@@ -159,7 +159,7 @@ stock
 
 	do
 	{
-		printf("%d",
+		printf(format,
 			(_:barray[index >>> m] >>> ((index & ((1 << m) - 1)) << shift)) &
 			lim
 		);
