@@ -16,4 +16,4 @@ Library that will help you to work with bitwise operations.
 | Name     | Version | Description |
 |---------:|:-------:|:------------|
 | [tdw_bit](https://github.com/TDW-org/samp-include-bit/blob/master/tdw_bit.inc)       | 2.1.0 | Contains the macros. |
-| [tdw_bitset](https://github.com/TDW-org/samp-include-bit/blob/master/tdw_bitset.inc) | 2.1.0 | Bit-array |
+| [tdw_bitset](https://github.com/TDW-org/samp-include-bit/blob/master/tdw_bitset.inc) | 2.1.4 | Bit-array |
