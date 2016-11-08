@@ -109,6 +109,22 @@ enum
 
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_Set - sets the value into the bit-array.
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	idx - the index of the bit-array
+	value - the passed value.
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	Returns 1, if the value is set, otherwise 0.
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	printf("%d", BitSet_Get(array, 12));
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Set(TDW_BITSET_TYPES:barray[], idx, value, size = sizeof barray,
 		tag = tagof(barray))
@@ -130,6 +146,23 @@ stock
 }
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_Get - gets a value from the bit-array.
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	idx - the index of the bit-array
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	Returns the value, otherwise 0.
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	printf("%d",
+		BitSet_Get(array, 12)
+	);
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Get(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
 		tag = tagof(barray))
@@ -148,6 +181,21 @@ stock
 }
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_Print - displays all of the cells from the bit-array.
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	const format[] - the format of the output values from the bit-array.
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	Always returns zero.
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	BitSet_Print(array);
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Print(TDW_BITSET_TYPES:barray[], const format[] = "%d",
 		size = sizeof barray, tag = tagof(barray))
@@ -170,6 +218,23 @@ stock
 }
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_Count
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	idx - the index of the bit-array
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	Returns the number of bits in the bit-array that are set.
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	BitSet_Count(array, 8);
+| Remarks:
+	graphics.stanford.edu/~seander/bithacks.html
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Count(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
 		tag = tagof(barray))
@@ -226,6 +291,21 @@ stock
 }
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_Any
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	idx - the index of the bit-array
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	Returns whether any of the bits is set.
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	printf("%d", BitSet_Any(array, 8));
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Any(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
 		tag = tagof(barray))
@@ -234,6 +314,21 @@ stock
 }
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_None
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	idx - the index of the bit-array
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	Returns whether none of the bits is set.
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	printf("%d", BitSet_None(array, 8));
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_None(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
 		tag = tagof(barray))
@@ -242,6 +337,22 @@ stock
 }
 
 
+/** ------------------------------------------------------------------------ **\
+| Function:
+	BitSet_Flip - flips bit values converting zeros into ones and ones into
+	zeros.
+| Parameters:
+	TDW_BITSET_TYPES:barray[] - bit-array
+	idx - the index of the bit-array
+	size - size of the bit-array
+	tag - tag of the bit-array (1, 2, 4, 8, 16)
+| Returns:
+	-
+| Example:
+	new Bit:array<4>[12];
+	BitSet_Set(array, 8, 12);
+	printf("%d", BitSet_Flip(array, 8));
+\** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Flip(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
 		tag = tagof(barray))
@@ -261,6 +372,7 @@ stock
 	return 1;
 }
 
+// Remove all internal definitions
 #undef BIT_ST
 #undef n_bit1
 #undef n_bit2
