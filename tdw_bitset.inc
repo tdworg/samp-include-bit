@@ -123,7 +123,7 @@ enum
 | Example:
 	new Bit:array<4>[12];
 	BitSet_Set(array, 8, 12);
-	printf("%d", BitSet_Get(array, 12));
+	printf("%d", BitSet_Get(array, 8));
 \** ------------------------------------------------------------------------ **/
 stock
 	BitSet_Set(TDW_BITSET_TYPES:barray[], idx, value, size = sizeof barray,
@@ -160,7 +160,7 @@ stock
 	new Bit:array<4>[12];
 	BitSet_Set(array, 8, 12);
 	printf("%d",
-		BitSet_Get(array, 12)
+		BitSet_Get(array, 8)
 	);
 \** ------------------------------------------------------------------------ **/
 stock
