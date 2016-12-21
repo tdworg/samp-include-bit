@@ -372,6 +372,7 @@ stock
 	return 1;
 }
 
+// =============================================================================
 // Remove all internal definitions
 #undef BIT_ST
 #undef n_bit1
