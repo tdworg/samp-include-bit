@@ -1,27 +1,30 @@
 /** ======================================================================== **\
-	Bit Array
+	PackedBitSet
+
+| Description:
+
 
 | Version:
-2.1.5
+	3.0.0
 
 | License:
-Copyright (c) 2016 Double V
+	Copyright (c) 2016 Double V
 
-This software is provided 'as-is', without any express or implied
-warranty. In no event will the authors be held liable for any damages
-arising from the use of this software.
+	This software is provided 'as-is', without any express or implied
+	warranty. In no event will the authors be held liable for any damages
+	arising from the use of this software.
 
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
 
-1.	The origin of this software must not be misrepresented; you must not
-	claim that you wrote the original software. If you use this software
-	in a product, an acknowledgement in the product documentation would be
-	appreciated but is not required.
-2.	Altered source versions must be plainly marked as such, and must not be
-	misrepresented as being the original software.
-3.	This notice may not be removed or altered from any source distribution.
+	1.	The origin of this software must not be misrepresented; you must not
+		claim that you wrote the original software. If you use this software
+		in a product, an acknowledgement in the product documentation would be
+		appreciated but is not required.
+	2.	Altered source versions must be plainly marked as such, and must not be
+		misrepresented as being the original software.
+	3.	This notice may not be removed or altered from any source distribution.
 \** ======================================================================== **/
 
 
@@ -41,215 +44,178 @@ freely, subject to the following restrictions:
 	#error Library 'tdw_bit' is not found! Download it!
 #endif
 
-// Functions that compute the index and the offset of an array.
-#define GetBitIndex%0(%1,%2) ((%2) / (tagof(%1) - BIT_ST_TAG))
-#define GetBitOffset%0(%1,%2) ((%2) % (tagof(%1) - BIT_ST_TAG))
+// All tags for bitset-functions
+#define _TDW_BITSET_TYPES_ { TDW_BITSET_1, TDW_BITSET_2, TDW_BITSET_4, TDW_BITSET_8, TDW_BITSET_16 }
 
-// All tags for bit-arrays.
-#define TDW_BITSET_TYPES {TDW_BITSET_1, TDW_BITSET_2, TDW_BITSET_4, \
-	TDW_BITSET_8, TDW_BITSET_16}
-
-// In order to register tags i use const operator to define them. If use
-// the macros, the result would have been different.
-const
-	BIT_ST_NONE:BIT_ST = BIT_ST_NONE:0,
-	BIT_ST_TAG = tagof(BIT_ST),
-	TDW_BITSET_1:n_bit1 = TDW_BITSET_1:0,
-	TDW_BITSET_2:n_bit2 = TDW_BITSET_2:0,
-	TDW_BITSET_4:n_bit4 = TDW_BITSET_4:0,
-	TDW_BITSET_8:n_bit8 = TDW_BITSET_8:0,
-	TDW_BITSET_16:n_bit16 = TDW_BITSET_16:0,
-	BIT_1_TAG = tagof(n_bit1),
-	BIT_2_TAG = tagof(n_bit2),
-	BIT_4_TAG = tagof(n_bit4),
-	BIT_8_TAG = tagof(n_bit8),
-	BIT_16_TAG = tagof(n_bit16),
-	BIT_ST_TAG_B32 = 5;
-
-// This conditionals checks if the tag has already been defined before
-// this library. The conditionals is very simple. If the tag id is less than
-// the id of the special tag, the tag was already used even before the inclusion
-// of this library.
-#if BIT_1_TAG < BIT_ST_TAG
-	#error tag 'TDW_BITSET_1' already defined!
-#elseif BIT_2_TAG < BIT_ST_TAG
-	#error tag 'TDW_BITSET_2' already defined!
-#elseif BIT_4_TAG < BIT_ST_TAG
-	#error tag 'TDW_BITSET_4' already defined!
-#elseif BIT_8_TAG < BIT_ST_TAG
-	#error tag 'TDW_BITSET_8' already defined!
-#elseif BIT_16_TAG < BIT_ST_TAG
-	#error tag 'TDW_BITSET_16' already defined!
+#if !defined NULL
+	const NULL = 0;
 #endif
 
+// Check if the tags are registered
+#if defined TDW_BITSET_1_TAG || defined TDW_BITSET_16_TAG
+	#error The tags have already registered.
+#endif
 
-enum
-	E_BITS
+#if !defined cellbytes
+	const cellbytes = cellbits / charbits;
+#endif
+
+#define Bit:%1<%2,%3> TDW_BITSET_%3:%1[((%2) + BITSET_SIZE_PART_%3) >>> _:(BIT32 - BIT%3)]
+
+// Get the tag ids to detect them in the functions because the compiler registers
+// the tags at compile time
+const
+	TDW_BITSET_NONE:BITSET_NONE_ = TDW_BITSET_NONE:NULL,
+	TDW_BITSET_1:BITSET_TAG_1_   = TDW_BITSET_1:   NULL,
+	TDW_BITSET_2:BITSET_TAG_2_   = TDW_BITSET_2:   NULL,
+	TDW_BITSET_4:BITSET_TAG_4_   = TDW_BITSET_4:   NULL,
+	TDW_BITSET_8:BITSET_TAG_8_   = TDW_BITSET_8:   NULL,
+	TDW_BITSET_16:BITSET_TAG_16_ = TDW_BITSET_16:  NULL,
+	TDW_BITSET_NONE_TAG          = tagof(BITSET_NONE_  ),
+	TDW_BITSET_1_TAG             = tagof(BITSET_TAG_1_ ),
+	TDW_BITSET_2_TAG             = tagof(BITSET_TAG_2_ ),
+	TDW_BITSET_4_TAG             = tagof(BITSET_TAG_4_ ),
+	TDW_BITSET_8_TAG             = tagof(BITSET_TAG_8_ ),
+	TDW_BITSET_16_TAG            = tagof(BITSET_TAG_16_);
+
+// We declare the constants with a "const" qualifier (not #define)
+// because they computes the values at compile time.
+const
+	BITSET_SIZE_PART_1           = cellbits - 1,
+	BITSET_SIZE_PART_2           = cellbits / 2 - 1,
+	BITSET_SIZE_PART_4           = cellbits / 4 - 1,
+	BITSET_SIZE_PART_8           = cellbits / 8 - 1,
+	BITSET_SIZE_PART_16          = cellbits / 16 - 1;
+
+enum E_TDW_BITSET_SHIFT
 {
-	BIT1,
-	BIT2,
-	BIT4,
-	BIT8,
-	BIT16,
-	BIT32
+	BIT1,  // 0
+	BIT2,  // 1
+	BIT4,  // 2
+	BIT8,  // 3
+	BIT16, // 4
+	BIT32  // 5
 };
 
-
-#define Bit:%2[%3] TDW_BITSET_8:TDW_BITSET_T0:%2|||%3|||
-#define TDW_BITSET_8:TDW_BITSET_T0:%2<%1>|||%3|||\
-	TDW_BITSET_%1:%2[BIT_PART_SIZE(%3,%1)]
-#define TDW_BITSET_T0:%2|||%3||| %2[BIT_PART_SIZE(%3,8)]
-
-#define BIT_PART_SIZE(%3,%1) ((%3) + BIT_SIZE_PART_%1) >>> _:(BIT32 - BIT%1)
-#define BIT_SIZE_PART_1 (31)
-#define BIT_SIZE_PART_2 (15)
-#define BIT_SIZE_PART_4 (7)
-#define BIT_SIZE_PART_8 (3)
-#define BIT_SIZE_PART_16 (1)
-
-
-
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_Set - sets the value into the bit-array.
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	idx - the index of the bit-array
-	value - the passed value.
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	Returns 1, if the value is set, otherwise 0.
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	printf("%d", BitSet_Get(array, 8));
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_Set(TDW_BITSET_TYPES:barray[], idx, value, size = sizeof barray,
-		tag = tagof(barray))
+// Sets a value in bitset.
+stock BitSet_Set(_TDW_BITSET_TYPES_:_bitset[], index, value, size = sizeof(_bitset),
+	tag = tagof(_bitset))
 {
-	new shift = tag - BIT_ST_TAG - 1,
-		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << shift,
-		lim = (1 << (1 << shift)) - 1;
+	new
+		part_size_in_cell = tag - TDW_BITSET_NONE_TAG,
+		array_shift  = _:BIT32 - (--part_size_in_cell),
+		bit_shift_in_array = (index & ((1 << array_shift) - 1)) << part_size_in_cell,
+		part_limit = (1 << (1 << part_size_in_cell)) - 1;
 
-	idx = idx >>> m;
-
-	if (_:(-1 < idx < size) == 0)
+	if (_:(-1 < (index >>>= array_shift) < size) == 0)
 		return 0;
 
-	(_:barray[idx] &= ~(lim << var));
-	(_:barray[idx] |= ((lim & value) << var));
+	new
+		addr;
+
+	// Get the cell address in the _bitset
+	#emit load.s.alt _bitset
+	#emit load.s.pri index
+	#emit idxaddr
+	#emit stor.s.pri addr
+	// _bitset[index] = ([addr] & ~(part_limit << bit_shift_in_array)) |
+	//   ((part_limit & value) << bit_shift_in_array)
+	#emit load.s.pri part_limit
+	#emit load.s.alt bit_shift_in_array
+	#emit shl
+	#emit invert
+	#emit lref.s.alt addr
+	#emit and
+	#emit push.pri
+	#emit load.s.pri part_limit
+	#emit load.s.alt value
+	#emit and
+	#emit load.s.alt bit_shift_in_array
+	#emit shl
+	#emit pop.alt
+	#emit or
+	#emit sref.s.pri addr
 
 	return 1;
 }
 
-
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_Get - gets a value from the bit-array.
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	idx - the index of the bit-array
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	Returns the value, otherwise 0.
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	printf("%d",
-		BitSet_Get(array, 8)
-	);
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_Get(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
-		tag = tagof(barray))
+// Gets a value from bitset.
+stock BitSet_Get(_TDW_BITSET_TYPES_:_bitset[], index, size = sizeof(_bitset),
+	tag = tagof(_bitset))
 {
-	new shift = tag - BIT_ST_TAG - 1,
-		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << shift,
-		lim = (1 << (1 << shift)) - 1;
+	new
+		part_size_in_cell = tag - TDW_BITSET_NONE_TAG,
+		array_shift  = _:BIT32 - (--part_size_in_cell),
+		bit_shift_in_array = (index & ((1 << array_shift) - 1)) << part_size_in_cell,
+		part_limit = (1 << (1 << part_size_in_cell)) - 1;
 
-	idx = idx >>> m;
-
-	if (_:(-1 < idx < size) == 0)
+	if (_:(-1 < (index >>>= array_shift) < size) == 0)
 		return 0;
 
-	return (_:barray[idx] >>> var) & lim;
+	const STACK_BYTES = 4 * cellbytes;
+
+	// Get the value in the _bitset
+	#emit load.s.alt _bitset
+	#emit load.s.pri index
+	#emit lidx
+	// (_bitset value >>> bit_shift_in_array) | part_limit
+	#emit load.s.alt bit_shift_in_array
+	#emit sshr
+	#emit load.s.alt part_limit
+	#emit and
+	#emit stack      STACK_BYTES
+	#emit retn
+
+	return 0;  // make compiler happy.
 }
 
-
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_Print - displays all of the cells from the bit-array.
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	const format[] - the format of the output values from the bit-array.
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	Always returns zero.
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	BitSet_Print(array);
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_Print(TDW_BITSET_TYPES:barray[], const format[] = "%d",
-		size = sizeof barray, tag = tagof(barray))
+// Flips a value
+stock BitSet_Flip(_TDW_BITSET_TYPES_:_bitset[], index, mask = -1, size = sizeof(_bitset),
+	tag = tagof(_bitset))
 {
-	new shift = tag - BIT_ST_TAG - 1,
-		m = BIT_ST_TAG_B32 - shift,
-		lim = (1 << (1 << shift)) - 1,
-		index;
+	new
+		part_size_in_cell = tag - TDW_BITSET_NONE_TAG,
+		array_shift  = _:BIT32 - (--part_size_in_cell),
+		bit_shift_in_array = (index & ((1 << array_shift) - 1)) << part_size_in_cell,
+		part_limit = (1 << (1 << part_size_in_cell)) - 1;
 
-	do
-	{
-		printf(format,
-			(_:barray[index >>> m] >>> ((index & ((1 << m) - 1)) << shift)) &
-			lim
-		);
-	}
-	while ((++index >>> m) < size);
-
-	return 0;
-}
-
-
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_Count
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	idx - the index of the bit-array
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	Returns the number of bits in the bit-array that are set.
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	BitSet_Count(array, 8);
-| Remarks:
-	graphics.stanford.edu/~seander/bithacks.html
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_Count(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
-		tag = tagof(barray))
-{
-	new shift = tag - BIT_ST_TAG - 1,
-		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << shift,
-		lim = (1 << (1 << shift)) - 1;
-
-	idx = idx >>> m;
-
-	if (_:(-1 < idx < size) == 0)
-	{
+	if (_:(-1 < (index >>>= array_shift) < size) == 0)
 		return 0;
-	} {} // Zero....
+
+	new
+		addr;
+
+	// Get the cell address in the _bitset
+	#emit load.s.alt _bitset
+	#emit load.s.pri index
+	#emit idxaddr
+	#emit stor.s.pri addr
+	// (_:_bitset[index] = _bitset[index] ^ ((part_limit & mask) << bit_shift_in_array));
+	#emit load.s.pri part_limit
+	#emit load.s.alt mask
+	#emit and
+	#emit load.s.alt bit_shift_in_array
+	#emit shl
+	#emit lref.s.alt addr
+	#emit xor
+	#emit sref.s.pri addr
+
+	return 1;
+}
+
+// Counts the bits in the cell
+stock BitSet_Count(_TDW_BITSET_TYPES_:_bitset[], index, size = sizeof(_bitset),
+	tag = tagof(_bitset))
+{
+	new
+		part_size_in_cell = tag - TDW_BITSET_NONE_TAG,
+		array_shift  = _:BIT32 - (--part_size_in_cell),
+		bit_shift_in_array = (index & ((1 << array_shift) - 1)) << part_size_in_cell,
+		part_limit = (1 << (1 << part_size_in_cell)) - 1;
+
+	if (_:(-1 < (index >>>= array_shift) < size) == 0)
+		return 0;
+	{}
 
 	#emit addr.alt barray
 	#emit load.s.pri idx
@@ -287,97 +253,19 @@ stock
 	#emit stack 0x10
 	#emit retn
 
-	return 0;
+	return 0;  // make compiler happy.
 }
 
+/// ----
 
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_Any
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	idx - the index of the bit-array
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	Returns whether any of the bits is set.
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	printf("%d", BitSet_Any(array, 8));
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_Any(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
-		tag = tagof(barray))
+stock BitSet_Any(_TDW_BITSET_TYPES_:_bitset[], index, size = sizeof(_bitset),
+	tag = tagof(_bitset))
 {
-	return BitSet_Get(barray, idx, size, tag) != 0;
+	return BitSet_Get(_bitset, index, size, tag);
 }
 
-
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_None
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	idx - the index of the bit-array
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	Returns whether none of the bits is set.
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	printf("%d", BitSet_None(array, 8));
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_None(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
-		tag = tagof(barray))
+stock BitSet_None(_TDW_BITSET_TYPES_:_bitset[], index, size = sizeof(_bitset),
+	tag = tagof(_bitset))
 {
-	return BitSet_Get(barray, idx, size, tag) == 0;
+	return BitSet_Get(_bitset, index, size, tag) == 0;
 }
-
-
-/** ------------------------------------------------------------------------ **\
-| Function:
-	BitSet_Flip - flips bit values converting zeros into ones and ones into
-	zeros.
-| Parameters:
-	TDW_BITSET_TYPES:barray[] - bit-array
-	idx - the index of the bit-array
-	size - size of the bit-array
-	tag - tag of the bit-array (1, 2, 4, 8, 16)
-| Returns:
-	-
-| Example:
-	new Bit:array<4>[12];
-	BitSet_Set(array, 8, 12);
-	printf("%d", BitSet_Flip(array, 8));
-\** ------------------------------------------------------------------------ **/
-stock
-	BitSet_Flip(TDW_BITSET_TYPES:barray[], idx, size = sizeof barray,
-		tag = tagof(barray))
-{
-	new shift = tag - BIT_ST_TAG - 1,
-		m = BIT_ST_TAG_B32 - shift,
-		var = (idx & ((1 << m) - 1)) << shift,
-		lim = (1 << (1 << shift)) - 1;
-
-	idx = idx >>> m;
-
-	if (_:(-1 < idx < size) == 0)
-		return 0;
-
-	(_:barray[idx] ^= ((lim & 0xFFFFFFFF) << var));
-
-	return 1;
-}
-
-// =============================================================================
-// Remove all internal definitions
-#undef BIT_ST
-#undef n_bit1
-#undef n_bit2
-#undef n_bit4
-#undef n_bit8
-#undef n_bit16
-#undef BIT_ST_TAG_B32
